@@ -64,6 +64,21 @@ namespace HotPocket.Client
             return signedInpContainer;
         }
 
+        public JObject CreateReadRequest(byte[] request)
+        {
+            if (request.Length == 0)
+                return null;
+
+            var obj = new JObject();
+            obj["type"] = "contract_read_request";
+            if (_protocol == Protocols.JSON)
+                obj["input"] = ToHex(request);
+            else
+                obj["input"] = request;
+
+            return obj;
+        }
+
         public JObject CreateStatusRequest()
         {
             JObject obj = new JObject();

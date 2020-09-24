@@ -106,6 +106,17 @@ namespace HotPocket.Client
             return new ContractInputStatus(true);
         }
 
+        public async Task<byte[]> SendReadRequest(byte[] request)
+        {
+            var msgBytes = _msgHelper.Serialize(_msgHelper.CreateReadRequest(request));
+            await SendAsync(msgBytes);
+            var recvMsg = await ReceiveMessageAsync("contract_read_response", 3000);
+            if (recvMsg == null)
+                return null;
+            else
+                return recvMsg["content"].ToObject<byte[]>();
+        }
+
         public async Task<LedgerStatus> GetStatusAsync()
         {
             var sendBytes = _msgHelper.Serialize(_msgHelper.CreateStatusRequest());
@@ -130,9 +141,7 @@ namespace HotPocket.Client
                     var msgBytes = await RecieveAsync(cts.Token);
                     var msg = _msgHelper.Deserialize(msgBytes);
                     if (msg["type"].ToObject<string>() == type)
-                    {
                         return msg;
-                    }
                 }
                 catch (TaskCanceledException)
                 {
