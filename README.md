@@ -1,1 +1,1 @@
-# hplibs
+# Hot Pocket SDK libraries
