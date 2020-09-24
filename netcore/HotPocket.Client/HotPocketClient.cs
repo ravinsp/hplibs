@@ -44,7 +44,8 @@ namespace HotPocket.Client
                     if (msg["type"].ToObject<string>() == "handshake_challenge")
                     {
                         var challenge = msg["challenge"].ToObject<string>();
-                        var sendBytes = _msgHelper.Serialize(_msgHelper.CreateHandshakeResponse(challenge));
+                        var response = JsonConvert.SerializeObject(_msgHelper.CreateHandshakeResponse(challenge));
+                        var sendBytes = Encoding.UTF8.GetBytes(response);
                         await SendAsync(sendBytes);
 
                         // Wait for some time and see whether we are still connected.
@@ -91,7 +92,7 @@ namespace HotPocket.Client
             var msgBytes = _msgHelper.Serialize(inputMsg);
             await SendAsync(msgBytes);
 
-            var inputStatus = await ReceiveMessageAsync("contract_input_status", 20000);
+            var inputStatus = await ReceiveMessageAsync("contract_input_status", 10000);
             if (inputStatus == null)
                 return new ContractInputStatus(false, "timeout");
 
@@ -104,6 +105,15 @@ namespace HotPocket.Client
                 return new ContractInputStatus(false, inputStatus["reason"].ToObject<string>());
 
             return new ContractInputStatus(true);
+        }
+
+        public async Task<byte[]> ReceiveContractOutputAsync()
+        {
+            var recvMsg = await ReceiveMessageAsync("contract_output", 10000);
+            if (recvMsg == null)
+                return null;
+            else
+                return recvMsg["content"].ToObject<byte[]>();
         }
 
         public async Task<byte[]> SendReadRequest(byte[] request)

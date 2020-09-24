@@ -30,7 +30,7 @@ namespace HotPocket.Client
             var obj = new JObject();
             obj["type"] = "handshake_response";
             obj["challenge"] = challenge;
-            obj["sig"] = sigBytes.ToString();
+            obj["sig"] = ToHex(sigBytes);
             obj["pubkey"] = "ed" + ToHex(_key.Export(KeyBlobFormat.RawPublicKey));
             obj["protocol"] = _protocol;
 
@@ -72,9 +72,9 @@ namespace HotPocket.Client
             var obj = new JObject();
             obj["type"] = "contract_read_request";
             if (_protocol == Protocols.JSON)
-                obj["input"] = ToHex(request);
+                obj["content"] = ToHex(request);
             else
-                obj["input"] = request;
+                obj["content"] = request;
 
             return obj;
         }
@@ -125,7 +125,7 @@ namespace HotPocket.Client
         {
             StringBuilder hex = new StringBuilder(bytes.Length * 2);
             foreach (byte b in bytes)
-                hex.AppendFormat("{0:x2}", bytes);
+                hex.AppendFormat("{0:x2}", b);
             return hex.ToString();
         }
     }
