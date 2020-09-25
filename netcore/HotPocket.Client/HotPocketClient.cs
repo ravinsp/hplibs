@@ -20,11 +20,11 @@ namespace HotPocket.Client
         private readonly MessageHelper _msgHelper;
         private bool _disposedValue;
 
-        public HotPocketClient(Uri server, Key key)
+        public HotPocketClient(Uri server, Key keyPair)
         {
             _server = server;
-            _key = key;
-            _msgHelper = new MessageHelper(key, Protocols.BSON);
+            _key = keyPair;
+            _msgHelper = new MessageHelper(keyPair, Protocols.BSON);
         }
 
         public async Task<bool> ConnectAsync()
@@ -116,7 +116,7 @@ namespace HotPocket.Client
                 return recvMsg["content"].ToObject<byte[]>();
         }
 
-        public async Task<byte[]> SendReadRequest(byte[] request)
+        public async Task<byte[]> SendReadRequestAsync(byte[] request)
         {
             var msgBytes = _msgHelper.Serialize(_msgHelper.CreateReadRequest(request));
             await SendAsync(msgBytes);
