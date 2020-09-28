@@ -1,2 +1,4 @@
-bin
+*/bin/Debug
+*/bin/Release/*/*
 obj
+!*/bin/Release/*/HotPocket.Client.dll

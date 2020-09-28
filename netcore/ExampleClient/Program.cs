@@ -15,9 +15,9 @@ namespace ExampleClient
             using var keyPair = HotPocketKeyGenerator.Generate();
 
             // Generate a new key pair using existing private key.
-            // using var keyPair = HotPocketKeyGenerator.Generate("<custom private key>");
+            // using var keyPair = HotPocketKeyGenerator.Generate("<custom private key hex>");
 
-            var server = new Uri("ws://<server ip>:<server poirt>");
+            var server = new Uri("ws://<server ip>:<server port>");
 
             using var hpc = new HotPocketClient(server, keyPair);
 
