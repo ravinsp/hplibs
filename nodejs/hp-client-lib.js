@@ -17,17 +17,29 @@ const events = {
 Object.freeze(events);
 
 const HotPocketKeyGenerator = {
-    generate: async function () {
+    generate: async function (privateKeyHex = null) {
         await sodium.ready;
-        const keys = sodium.crypto_sign_keypair();
-        return keys;
-    }
+
+        if (!privateKeyHex) {
+            const keys = sodium.crypto_sign_keypair();
+            return {
+                privateKey: keys.privateKey,
+                publicKey: keys.publicKey
+            }
+        }
+        else {
+            const binPrivateKey = Buffer.from(privateKeyHex, "hex");
+            return {
+                privateKey: Uint8Array.from(binPrivateKey),
+                publicKey: Uint8Array.from(binPrivateKey.slice(32))
+            }
+        }
+    },
 }
 
-function HotPocketClient(server, keys) {
+function HotPocketClient(server, keys, protocol = protocols.BSON) {
 
     let ws = null;
-    const protocol = protocols.BSON;
     const msgHelper = new MessageHelper(keys, protocol);
     const emitter = new EventEmitter();
 
@@ -152,7 +164,7 @@ function HotPocketClient(server, keys) {
         // Acquire the current lcl and add the specified offset.
         const stat = await this.getStatus();
         if (!stat)
-            return new Promise(resolve => resolve(null));
+            return new Promise(resolve => resolve("ledger_status_error"));
         const maxLclSeqNo = stat.lclSeqNo + maxLclOffset;
 
         const msg = msgHelper.createContractInput(input, nonce, maxLclSeqNo);
