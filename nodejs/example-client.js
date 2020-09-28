@@ -30,13 +30,13 @@ async function main() {
     // This will get fired when contract sends an output.
     hpc.on(HotPocketEvents.contractOutput, (output) => {
         console.log();
-        console.log("Contract output>> " + Buffer.from(output, "hex"));
+        console.log("Contract output>> " + output);
     })
 
     // This will get fired when contract sends a read response.
     hpc.on(HotPocketEvents.contractReadResponse, (response) => {
         console.log();
-        console.log("Contract read response>> " + Buffer.from(response, "hex"));
+        console.log("Contract read response>> " + response);
     })
 
     // On ctrl + c we should close HP connection gracefully.
