@@ -10,7 +10,7 @@ Download and include Dart HotPocket Client Library for your Flutter app.
 
 - [HotPocket Client Library for Dart](https://github.com/ravinsp/hplibs/tree/dart-client-lib/dart/hotpocket_client_lib)
 
-Add this library to your pubspec.yaml under dependacies section
+Add this library to your pubspec.yaml under dependencies section
 ```
 dependencies:
   flutter:
