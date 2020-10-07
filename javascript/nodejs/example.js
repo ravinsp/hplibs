@@ -1,7 +1,8 @@
 // Example program to demonstrate Hot Pocket NodeJs client library.
+// Usage: node example.js
 
 const { exit } = require('process');
-const { HotPocketKeyGenerator, HotPocketClient, HotPocketEvents } = require('./hp-client-lib');
+const { HotPocketKeyGenerator, HotPocketClient, HotPocketEvents } = require('../hp-client-lib');
 
 async function main() {
 
@@ -11,7 +12,7 @@ async function main() {
     // Generate a new key pair using existing private key.
     // const keys = HotPocketKeyGenerator.generate("<custom private key hex>");
 
-    const server = 'ws://<server ip>:<server port>';
+    const server = 'ws://<server>:<port>';
     const hpc = new HotPocketClient(server, keys);
 
     // Establish HotPocket connection.
